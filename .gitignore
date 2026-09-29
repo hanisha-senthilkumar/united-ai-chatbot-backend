@@ -1,0 +1,37 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
+**/bin/
+**/obj/
+
+# Test output and coverage
+TestResults/
+**/TestResults/
+*.trx
+coverage/
+
+# Local development configuration and secrets
+.env
+.env.*
+**/.env
+**/.env.*
+appsettings.Development.json
+**/appsettings.Development.json
+appsettings.Local.json
+**/appsettings.Local.json
+
+# Local databases and runtime files
+*.db
+*.sqlite
+*.sqlite3
+*.mdf
+*.ldf
+
+# OS/editor files
+.DS_Store
+Thumbs.db
