@@ -103,7 +103,8 @@ namespace CourseModuleAPI.Services
                         if (existing != null)
                         {
                             existing.Description = course.Description ?? existing.Description;
-                            existing.Category = course.Category ?? existing.Category;
+                    existing.Category = course.Category ?? existing.Category;
+                    existing.Domain = course.Domain ?? existing.Domain;
                             existing.Duration = course.Duration ?? existing.Duration;
                             existing.SourceUrl = course.SourceUrl ?? existing.SourceUrl;
                             existing.UpdatedAt = DateTime.UtcNow;
@@ -205,6 +206,9 @@ namespace CourseModuleAPI.Services
                         ExtractJavaScriptString(value, "description"),
                         ExtractJavaScriptString(value, "overview")),
                     Category = ExtractJavaScriptString(value, "category"),
+                    Domain = FirstNonEmpty(
+                        ExtractJavaScriptString(value, "domain"),
+                        ExtractJavaScriptString(value, "category")),
                     Duration = ExtractJavaScriptString(value, "duration"),
                     SourceUrl = CoursesUrl,
                     CreatedAt = DateTime.UtcNow,
@@ -222,6 +226,7 @@ namespace CourseModuleAPI.Services
                 {
                     existing.Description = FirstNonEmpty(course.Description, existing.Description);
                     existing.Category = FirstNonEmpty(course.Category, existing.Category);
+                    existing.Domain = FirstNonEmpty(course.Domain, existing.Domain);
                     existing.Duration = FirstNonEmpty(course.Duration, existing.Duration);
                     existing.SourceUrl = course.SourceUrl;
                     existing.UpdatedAt = DateTime.UtcNow;
@@ -289,6 +294,7 @@ namespace CourseModuleAPI.Services
             string sourceUrl = null;
             string duration = null;
             string category = null;
+            string domain = null;
 
             // Name heuristics
             var titleNode = node.SelectSingleNode(".//h1|.//h2|.//h3|.//h4|.//a");
@@ -332,6 +338,7 @@ namespace CourseModuleAPI.Services
                     var catNode = detailDoc.DocumentNode.SelectSingleNode("//h2[contains(translate(.,'Domain','domain'),'Domain')]|//p[contains(translate(.,'Category','category'),'Category')]");
                     if (catNode != null)
                         category = NormalizeText(catNode.InnerText);
+                        domain = category;
 
                     // Find modules/syllabus: look for headings followed by ul/li
                     var moduleContainers = detailDoc.DocumentNode.SelectNodes("//h2[contains(translate(.,'MODULE','module'),'module')]|//h3[contains(translate(.,'MODULE','module'),'module')]|//div[contains(@class,'syllabus')]")
@@ -393,6 +400,7 @@ namespace CourseModuleAPI.Services
                 CourseName = name?.Trim(),
                 Description = description,
                 Category = category,
+                Domain = domain ?? category,
                 Duration = duration,
                 SourceUrl = sourceUrl,
                 CreatedAt = DateTime.UtcNow,

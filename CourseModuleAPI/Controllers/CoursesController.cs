@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CourseModuleAPI.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,13 @@ namespace CourseModuleAPI.Controllers
             _courseService = courseService;
             _scraper = scraper;
             _logger = logger;
+        }
+
+        [HttpGet("domain/{domain}")]
+        public async Task<IActionResult> GetByDomain(string domain)
+        {
+            var results = await _courseService.GetByDomainAsync(domain);
+            return Ok(new { success = true, domain, count = results.Count(), results });
         }
 
         [HttpGet]

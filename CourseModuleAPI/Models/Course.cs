@@ -19,6 +19,9 @@ namespace CourseModuleAPI.Models
         [MaxLength(200)]
         public string Category { get; set; }
 
+        [MaxLength(200)]
+        public string Domain { get; set; }
+
         [MaxLength(100)]
         public string Duration { get; set; }
 

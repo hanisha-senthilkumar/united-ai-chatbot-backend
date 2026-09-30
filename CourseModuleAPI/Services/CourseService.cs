@@ -18,6 +18,23 @@ namespace CourseModuleAPI.Services
             _moduleRepository = moduleRepository;
         }
 
+        public async Task<IEnumerable<CourseDto>> GetByDomainAsync(string domain)
+        {
+            if (string.IsNullOrWhiteSpace(domain))
+                return Enumerable.Empty<CourseDto>();
+
+            var courses = await _courseRepository.GetByDomainAsync(domain);
+            return courses.Select(MapCourseToDto);
+        }
+
+        public Task<int> CountByDomainAsync(string domain)
+        {
+            if (string.IsNullOrWhiteSpace(domain))
+                return Task.FromResult(0);
+
+            return _courseRepository.CountByDomainAsync(domain);
+        }
+
         public async Task<IEnumerable<CourseDto>> GetAllAsync()
         {
             var courses = await _courseRepository.GetAllAsync();
@@ -62,6 +79,7 @@ namespace CourseModuleAPI.Services
                 CourseName = c.CourseName,
                 Description = c.Description,
                 Category = c.Category,
+                Domain = c.Domain,
                 Duration = c.Duration,
                 SourceUrl = c.SourceUrl,
                 CreatedAt = c.CreatedAt,

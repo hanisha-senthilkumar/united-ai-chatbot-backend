@@ -26,6 +26,21 @@ namespace CourseModuleAPI.Repositories
             return await _db.Courses.Include(c => c.Modules).ToListAsync();
         }
 
+        public async Task<IEnumerable<Course>> GetByDomainAsync(string domain)
+        {
+            var normalizedDomain = domain.Trim().ToLower();
+            return await _db.Courses
+                .Include(c => c.Modules)
+                .Where(c => c.Domain != null && c.Domain.ToLower() == normalizedDomain)
+                .ToListAsync();
+        }
+
+        public async Task<int> CountByDomainAsync(string domain)
+        {
+            var normalizedDomain = domain.Trim().ToLower();
+            return await _db.Courses.CountAsync(c => c.Domain != null && c.Domain.ToLower() == normalizedDomain);
+        }
+
         public async Task<Course> GetByIdAsync(int id)
         {
             return await _db.Courses.Include(c => c.Modules).FirstOrDefaultAsync(c => c.CourseId == id);

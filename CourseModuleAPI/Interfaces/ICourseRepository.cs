@@ -7,6 +7,8 @@ namespace CourseModuleAPI.Interfaces
     public interface ICourseRepository
     {
         Task<IEnumerable<Course>> GetAllAsync();
+        Task<IEnumerable<Course>> GetByDomainAsync(string domain);
+        Task<int> CountByDomainAsync(string domain);
         Task<Course> GetByIdAsync(int id);
         Task<Course> GetByNameAsync(string name);
         Task AddAsync(Course course);
